@@ -3,8 +3,11 @@ services:
     build: ./srcs/requirements/mariadb
     restart: always
     env_file: .env
+    secrets:
+      - db_password
+      - db_root_password   # password del root di mariadb, usato solo in init.sh
     volumes:
-      - db_data: /var/lib/mysql
+      - db_data:/var/lib/mysql
     networks:
       - inception
     healthcheck:
@@ -18,13 +21,13 @@ services:
     restart: always
     env_file: .env
     secrets:
-      - db_password
+      - db_password        # password dell'utente generico di mariadb, wordpress la usa per connettersi al db
+      - credentials        # password dell'admin WordPress, usato in setup.sh
     depends_on:
         mariadb:
           condition: service_healthy
     volumes:
-      - wp_data: /var/www/html
-      - db_data: /var/lib/mysql
+      - wp_data:/var/www/html   # no db_data perchè ci parla tramite Mysql (i dati lì sono in binario, solo mysql ci può parlare)
     networks:
       - inception
 
@@ -38,18 +41,34 @@ services:
     ports:
       - "443:443"
     volumes:
-      - wp_data: /var/www/html
+      - wp_data:/var/www/html
     networks:
       - inception
 
 volumes:
   db_data:
     driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/plichota/data/db
   wp_data:
     driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/plichota/data/wordpress
 
 # Docker crea network di default da solo, ma da subject devo mettere questo
 # "The network line must be present in your docker-compose.yml file"
 networks:
   inception:
     driver: bridge
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt
+  db_root_password:
+    file: ./secrets/db_root_password.txt
+  credentials:
+    file: ./secrets/credentials.txt

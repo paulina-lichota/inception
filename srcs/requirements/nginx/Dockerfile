@@ -1,22 +1,17 @@
 FROM alpine:3.18
 
-RUN apk add --no-cache nginx openssl
+RUN apk add --no-cache nginx openssl gettext
 
-# Genera certificato self-signed
-RUN mkdir -p /etc/nginx/ssl && \
-    openssl req -x509 -newkey rsa:4096 \
-    -keyout /etc/nginx/ssl/key.pem \
-    -out /etc/nginx/ssl/cert.pem \
-    -days 365 -nodes \
-    -subj "/CN=${DOMAIN_NAME}"
+RUN mkdir -p /etc/nginx/ssl
 
-COPY conf/nginx.conf /etc/nginx/nginx.conf
+COPY conf/nginx.conf.template /etc/nginx/nginx.conf.template
+COPY tools/start.sh /etc/nginx/tools/start.sh
 
-RUN mkdir -p /var/www/html
+RUN chmod +x /etc/nginx/tools/start.sh
 
 EXPOSE 443
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/bin/sh", "/etc/nginx/tools/start.sh"]
 
 # -nodes significa “no DES” — non cifra la chiave privata con una passphrase.
 # Necessario perché Nginx deve leggerla automaticamente all'avvio senza input umano.
