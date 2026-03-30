@@ -13,6 +13,9 @@ down:
 
 restart: down all
 
+inspect:
+
+
 mariadb:
 	docker compose exec -it mariadb bash 		# -it per interagire con il terminale del container, bash per accedere alla shell del container
 
