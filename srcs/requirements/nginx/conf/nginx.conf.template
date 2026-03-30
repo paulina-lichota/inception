@@ -1,21 +1,13 @@
-# Come nginx gestisce connessioni a basso livello
 events {
-    worker_connections 1024; # per ogni worker process massimo 1024 connessioni simultanee
+    worker_connections 1024;
 }
 
 http {
-    # non usare: unico entry point da subject: 443
-    # Server virtuale - redirect da HTTP a HTTPS
-    # server {
-    #     listen 80;
-    #     server_name plichota.42.fr;
-    #     return 301 https://$host$request_uri;
-    # }
+    include /etc/nginx/mime.types;
 
-    # Server HTTPS principale
     server {
         listen 443 ssl;
-        server_name plichota.42.fr;
+        server_name ${DOMAIN_NAME};
 
         ssl_certificate     /etc/nginx/ssl/cert.pem;
         ssl_certificate_key /etc/nginx/ssl/key.pem;

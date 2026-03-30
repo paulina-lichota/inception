@@ -75,6 +75,21 @@ The subject requires bind mounts at `/home/plichota/data` where WordPress data a
 > Docker Volume  →  /var/lib/docker/volumes/    →  persists, managed by Docker
 > Bind Mount     →  /home/plichota/data/db      →  persists, you decide the path
 
+### Build time vs Runtime
+
+During the build, Docker reads the Dockerfile and executes the commands.
+At that point it knows nothing about `docker-compose.yml` and therefore nothing about `.env`.
+Variables don't exist yet: if you try to use them Docker substitutes them with an empty value.
+
+Same problem for the SSL certificate, where `DOMAIN_NAME` is used in the `-subj` flag.
+
+This is why `tools/start.sh` exists. Docker can't read `.env`,
+it's `docker compose` that reads it, injects the variables, and starts the containers.
+But docker compose only intervenes at runtime. The build ends exactly when Docker finishes executing the last command in the Dockerfile.
+
+> `CMD` is not executed during the build. It's an instruction the container carries
+> with it and uses only at runtime to know which process to start as PID 1.
+
 ## Instructions
 
 ### Prerequisites
@@ -142,7 +157,8 @@ Claude (Anthropic) was used throughout this project for:
 
 All AI-generated content was reviewed, tested, and fully understood before being included in the project (this line included).
 
-## Additional Notes (written before this README)
+
+## 🇮🇹 Additional Notes (written before this README)
 
 ### Debian vs Alpine
 Alpine:
@@ -193,3 +209,33 @@ Quando definisci un volume, in realtà stai scrivendo in una cartella del disco 
 - 443: https
 - 9000: php-fpm
 - 3306: mysql/mariadb
+
+## Flusso iniezione variabili nel Dockerfile dentro nginx usando template + script
+
+### Preambolo
+Ho voluto creare un DOMAIN_NAME per il template di nginx (because why not?).
+Cambiare una variabile in un punto solo, invece di andarsela a cercare in una moltitudine di punti, mi pare più elegante. E anche se non lo fosse, rimane comunque un soddisfacente pavoneggiamento ingegneristico.
+
+### Come funziona?
+Durante la build, Docker legge Dockerfile ed esegue i comandi. E basta.
+In quel momento non sa niente di docker-compose.yml e quindi nemmeno di .env. Le varibili non esistono ancora, Docker non le vede. Se lo sostituisce, lo fa con un valore vuoto.
+
+Stessa cosa per il certificato SSL, nel punto in cui uso DOMAIN_NAME.
+
+### Perchè serve script?
+Docker non può leggere .env.
+E' il `docker compose` che legge .env, inietta le variabili e avvia i container. Ma il docker-compose interviene solo in run time. La build finisce esattamente quando Docker finisce di eseguire l'ultimo comando del Dockerfile.
+
+> CMD e' un metadato, non viene eseguito durante la build. E' un'istruzione che il container si porta dietro fino a runtime per sapere quale processo avviare come PID 1.
+
+docker compose up
+    ↓
+Docker legge .env
+    ↓
+Crea il container con le variabili d'ambiente già impostate
+    ↓
+Avvia CMD → start.sh
+    ↓
+start.sh trova DOMAIN_NAME già disponibile come variabile d'ambiente
+    ↓
+envsubst e openssl la usano correttamente
