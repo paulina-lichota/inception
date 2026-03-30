@@ -1,18 +1,17 @@
 #!/bin/sh
 
-# Scarica WordPress se non esiste già
+# Scarica WordPress solo se non è già installato
 if [ ! -f "/var/www/html/wp-config.php" ]; then
-    wget -O /tmp/wordpress.tar.gz https://wordpress.org/latest.tar.gz
-    tar -xzf /tmp/wordpress.tar.gz -C /tmp
-    mv /tmp/wordpress/* /var/www/html/
-    rm -rf /tmp/wordpress.tar.gz /tmp/wordpress
 
-    # Configura wp-config.php
+    # Scarica WordPress
+    wp core download --path=/var/www/html --allow-root
+
+    # Crea wp-config.php con le credenziali del database
     wp config create \
         --path=/var/www/html \
         --dbname=${MYSQL_DATABASE} \
         --dbuser=${MYSQL_USER} \
-        --dbpass=${MYSQL_PASSWORD} \
+        --dbpass=$(cat /run/secrets/db_password) \
         --dbhost=mariadb \
         --allow-root
 
@@ -22,26 +21,18 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
         --url=https://${DOMAIN_NAME} \
         --title="Inception" \
         --admin_user=${WP_ADMIN} \
-        --admin_password=${WP_ADMIN_PASSWORD} \
+        --admin_password=$(cat /run/secrets/wp_admin_password) \
         --admin_email=${WP_ADMIN_EMAIL} \
+        --skip-email \
         --allow-root
 
-    # Crea utente aggiuntivo
+    # Crea utente aggiuntivo richiesto dal subject
     wp user create \
         ${WP_USER} ${WP_USER_EMAIL} \
         --role=subscriber \
-        --user_pass=${WP_USER_PASSWORD} \
+        --user_pass=$(cat /run/secrets/wp_user_password) \
         --allow-root
+
 fi
 
 exec "$@"
-```
-
-Aggiungi al `.env`:
-```
-WP_ADMIN=admin
-WP_ADMIN_PASSWORD=adminpass
-WP_ADMIN_EMAIL=admin@login.42.fr
-WP_USER=user
-WP_USER_PASSWORD=userpass
-WP_USER_EMAIL=user@login.42.fr

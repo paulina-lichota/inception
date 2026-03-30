@@ -29,7 +29,8 @@ cd inception
 mkdir -p secrets
 echo -n "yourdbpassword" > secrets/db_password.txt
 echo -n "yourrootpassword" > secrets/db_root_password.txt
-echo -n "youradminpassword" > secrets/credentials.txt
+echo -n "youradminpassword" > secrets/wp_admin_password.txt
+echo -n "youruserpassword" > secrets/wp_user_password.txt
 ```
 
 ### 3. Create the .env file
@@ -181,7 +182,8 @@ inception/
 ├── USER_DOC.md
 ├── DEV_DOC.md
 ├── secrets/              ← not committed to git
-│   ├── credentials.txt
+│   ├── wp_admin_password.txt
+│   ├── wp_user_password.txt
 │   ├── db_password.txt
 │   └── db_root_password.txt
 └── srcs/

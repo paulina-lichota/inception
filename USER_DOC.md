@@ -47,7 +47,8 @@ All credentials are stored in the `secrets/` folder at the root of the project:
 |--------------------------------|---------------------------|
 | `secrets/db_password.txt`      | MariaDB user password     |
 | `secrets/db_root_password.txt` | MariaDB root password     |
-| `secrets/credentials.txt`      | WordPress admin password  |
+| `secrets/wp_admin_password.txt`| WordPress admin password  |
+| `secrets/wp_user_password.txt` | WordPress user password   |
 
 Non-sensitive configuration (usernames, domain, database name) is in `srcs/.env`.
 
