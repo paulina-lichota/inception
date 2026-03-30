@@ -51,17 +51,19 @@ In this project: non-sensitive configuration (domain name, usernames, database n
 
 **Docker Network vs Host Network**
 
-With `network: host`, the container shares the host's network stack directly — no isolation, no NAT. The container can see all host interfaces and ports.
+With `network: host`, the container shares the host's network stack directly: no isolation, no NAT. The container can see all host interfaces and ports.
 
-With a Docker `bridge` network, containers get their own isolated network. They can communicate with each other by service name (Docker handles internal DNS), but are not directly accessible from outside unless ports are explicitly exposed.
+With a Docker `bridge` network, containers get their own isolated network. TDocker creates a private virtual network that only the containers inside it can see. Each container gets its own IP, and Docker handles internal DNS so they can reach each other by service name (e.g. `mariadb:3306`). From the outside, the network is completely invisible.
 
 In this project, a custom bridge network called `inception` is used. Only Nginx exposes port 443 to the outside. MariaDB and WordPress are only reachable internally.
 
-> Shortly:
-> `network:host`   -> uses the host's network, no isolation
-> `network:bridge` -> creates an isolated virtual network, only explicitly exposed ports are accessible from outside
+> `network: host`   → container lives on the host network, no isolation
+> `network:bridge`  → container lives in a private network, only exposed ports are reachable from outside
 
 **Docker Volumes vs Bind Mounts**
+
+Without volumes, the data is stored in the writeable layer of the container filesystem (OverlayFS).
+This layer is temporary and is discarded when the container is stopped.
 
 Docker Volumes are managed entirely by Docker. Data is stored in `/var/lib/docker/volumes/`. They are portable and independent of the host's directory structure.
 
@@ -69,9 +71,9 @@ Bind Mounts link a specific host directory to a container path. They depend on t
 
 The subject requires bind mounts at `/home/plichota/data` where WordPress data and MariaDB data are persisted.
 
-> Shortly:
-> `Volumes`    = Docker directory        -> portable, independent, doesn't allow access from outside
-> `Bind Mount` = host machine directory  -> dependent on host fs, allows access from outside
+> No volume      →  writeable layer OverlayFS   →  it disappears with `docker rm`
+> Docker Volume  →  /var/lib/docker/volumes/    →  persists, managed by Docker
+> Bind Mount     →  /home/plichota/data/db      →  persists, you decide the path
 
 ## Instructions
 
