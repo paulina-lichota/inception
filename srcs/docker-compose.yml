@@ -1,6 +1,6 @@
 services:
   mariadb:
-    build: ./requirements/mariadb
+    build: ./srcs/requirements/mariadb
     restart: always
     env_file: .env
     volumes:
@@ -14,9 +14,11 @@ services:
       retries: 5
 
   wordpress:
-    build: ./requirements/wordpress
+    build: ./srcs/requirements/wordpress
     restart: always
     env_file: .env
+    secrets:
+      - db_password
     depends_on:
         mariadb:
           condition: service_healthy
@@ -27,7 +29,7 @@ services:
       - inception
 
   nginx:
-    build: ./requirements/nginx
+    build: ./srcs/requirements/nginx
     restart: always
     env_file: .env
     depends_on:
@@ -40,13 +42,14 @@ services:
     networks:
       - inception
 
-
 volumes:
   db_data:
     driver: local
   wp_data:
     driver: local
 
+# Docker crea network di default da solo, ma da subject devo mettere questo
+# "The network line must be present in your docker-compose.yml file"
 networks:
   inception:
     driver: bridge

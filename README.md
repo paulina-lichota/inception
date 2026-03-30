@@ -40,3 +40,10 @@ Quando definisci un volume, in realtà stai scrivendo in una cartella del disco 
         - wp_users
         - wp_options
     - mysql/    (db di sistema di maria db)
+
+
+## Porte standard
+- 80: http -> non devo usare (da subject)
+- 443: https
+- 9000: php-fpm
+- 3306: mysql/mariadb
