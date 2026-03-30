@@ -1,4 +1,4 @@
-This project has been created as part of the 42 curriculum by The Learning Alchemist 🧠🔮 plichota.
+This project has been created as part of the 42 curriculum by _The Learning Alchemist 🧠🔮 plichota_.
 
 # Inception
 
@@ -34,7 +34,7 @@ This provides strong isolation but with significant overhead in terms of resourc
 
 Docker uses the host kernel directly.
 Containers are isolated using Linux kernel features:
-- namespaces (for processes (PID), network (NET), filesystem isolation (MNT))
+- namespaces: PID for processes, NET for network, MNT for filesystem isolation
 - cgroups (resource limits).
 - file system (mounts, volumes)
 This makes containers much lighter and faster to start, at the cost of slightly weaker isolation since the kernel is shared.
