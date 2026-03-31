@@ -52,15 +52,13 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/oxymoron/Desktop/inception/data/db
-      #device: /home/plichota/data/db
+      device: /home/plichota/data/db
   wp_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/oxymoron/Desktop/inception/data/wordpress
-      #device: /home/plichota/data/wordpress
+      device: /home/plichota/data/wordpress
 
 # Docker crea network di default da solo, ma da subject devo mettere questo
 # "The network line must be present in your docker-compose.yml file"
