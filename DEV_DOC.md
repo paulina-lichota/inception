@@ -135,6 +135,12 @@ echo $?
 ```
 Returns `0` if the connection is successful. If not, check the logs of the mariadb container.
 
+## DB
+inside mariadb container:
+`mariadb -u root -p$(cat /run/secrets/db_root_password)`
+then:
+SHOW DATABASES;
+SHOW TABLES;
 
 ## Docker Compose commands
 ```bash

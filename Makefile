@@ -18,6 +18,9 @@ restart: down up
 mariadb:
 	$(DOCKER_COMPOSE_CMD) exec mariadb sh
 
+db:
+	docker exec -it srcs-mariadb-1 mariadb -u root -p$$(cat /run/secrets/db_root_password)
+
 wordpress:
 	$(DOCKER_COMPOSE_CMD) exec wordpress sh
 
@@ -52,4 +55,4 @@ help:
 	@echo "  clean   - Stop and remove containers, images, and volumes"
 	@echo "  fclean  - Remove all unused Docker data"
 
-.PHONY: all up stop down restart mariadb wordpress nginx logs clean fclean help
+.PHONY: all up stop down restart db mariadb wordpress nginx logs clean fclean help
