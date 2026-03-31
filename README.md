@@ -239,3 +239,26 @@ Avvia CMD → start.sh
 start.sh trova DOMAIN_NAME già disponibile come variabile d'ambiente
     ↓
 envsubst e openssl la usano correttamente
+
+## ENTRYPOINT vs CMD
+
+CMD: "usa questo comando, se nessun altro comando è specificato"
+> puoi sovrascrivere lo script dall'esterno con `docker run image altro_comando`
+
+ENTRYPOINT: "usa questo comando, punto."
+
+Esempio concreto:
+Stai debuggando e vuoi entrare dentro il container Wordpress senza che setup.sh parta. Lanci
+`docker run wordpress sh`
+Con CMD entra in sh invece che far partire setup.sh.
+Con ENTRYPOINT parte sempre. Per entrare in sh devi usare
+`docker run --entrypoint sh wordpress`
+Parte sempre, ma è più comodo usare CMD.
+
+> ENTRYPOINT esiste per un caso specifico: quando il container deve comportarsi come un eseguibile. (Quando vuoi usare il container come se fosse un programma installato sul tuo sistema)
+
+I motivi per usare ENTRYPOINT sono diversi:
+- **Compatibilità** — hai bisogno di una versione specifica di un tool che non è disponibile sul tuo sistema o che confligge con altra roba installata
+- **Ambienti puliti** — vuoi eseguire qualcosa senza sporcare il tuo sistema con dipendenze
+- **CI/CD** — nei pipeline di build e test ogni tool gira nel suo container, la macchina di build non ha niente installato
+- **Distribuzione** — invece di dire agli utenti "installa python 3.9, poi installa queste 20 dipendenze", gli dai un container che funziona già

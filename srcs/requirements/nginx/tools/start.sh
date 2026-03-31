@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Se non avessi fatto la pignola col DOMAIN_NAME, avrei potuto mettere tutto di là eh (nel Dockerfile)
+
 # Genera il certificato SSL self-signed
 openssl req -x509 -newkey rsa:4096 \
     -keyout /etc/nginx/ssl/key.pem \
