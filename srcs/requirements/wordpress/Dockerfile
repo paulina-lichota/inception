@@ -1,16 +1,17 @@
 FROM alpine:3.22
 
 RUN apk add --no-cache \
-    php83 \
-    php83-fpm \
-    php83-mysqli \
-    php83-json \
-    php83-curl \
-    php83-dom \
-    php83-mbstring \
-    php83-openssl \
-    php83-xml \
-    php83-zip \
+    php84 \
+    php84-fpm \
+    php84-mysqli \
+    php84-json \
+    php84-curl \
+    php84-dom \
+    php84-mbstring \
+    php84-openssl \
+    php84-xml \
+    php84-zip \
+    php84-phar \
     wget
 
 # Installa wp-cli (non esiste apk, scarichiamo dal sito che consiglia https://wp-cli.org)

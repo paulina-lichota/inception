@@ -16,7 +16,7 @@ SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$(cat /run/secrets/db_root_passw
 FLUSH PRIVILEGES;
 EOF
 
-    kill $(cat /var/run/mysqld/mysqld.pid)
+    mysqladmin -u root shutdown
     sleep 1
 
 fi

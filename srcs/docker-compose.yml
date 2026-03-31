@@ -52,14 +52,12 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ./data/db
       #device: /home/plichota/data/db
   wp_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ./data/wordpress
       #device: /home/plichota/data/wordpress
 
 # Docker crea network di default da solo, ma da subject devo mettere questo
