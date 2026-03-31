@@ -1,4 +1,4 @@
-DOCKER_COMPOSE_CMD = docker compose -f $(DOCKER_COMPOSE_FILE)
+DOCKER_COMPOSE_CMD = docker-compose -f $(DOCKER_COMPOSE_FILE)
 DOCKER_COMPOSE_FILE = srcs/docker-compose.yml
 
 all: up

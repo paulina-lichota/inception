@@ -1,4 +1,5 @@
 .env
 secrets/
+secrets.zip
 srcs/.env
 data/
