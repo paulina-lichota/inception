@@ -2,7 +2,7 @@ services:
   mariadb:
     build: ./srcs/requirements/mariadb
     restart: always
-    env_file: .env
+    env_file: ./srcs/.env
     secrets:
       - db_password
       - db_root_password   # password del root di mariadb, usato solo in init.sh
@@ -19,7 +19,7 @@ services:
   wordpress:
     build: ./srcs/requirements/wordpress
     restart: always
-    env_file: .env
+    env_file: ./srcs/.env
     secrets:
       - db_password        # password dell'utente generico di mariadb, wordpress la usa per connettersi al db
       - wp_admin_password  # password dell'admin WordPress, usato in setup.sh
@@ -35,7 +35,7 @@ services:
   nginx:
     build: ./srcs/requirements/nginx
     restart: always
-    env_file: .env
+    env_file: ./srcs/.env
     depends_on:
       wordpress:
         condition: service_started
