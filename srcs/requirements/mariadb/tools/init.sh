@@ -17,7 +17,7 @@ FLUSH PRIVILEGES;
 EOF
 
     mysqladmin -u root shutdown
-    sleep 1
+    sleep 5
 
 fi
 

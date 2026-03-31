@@ -124,6 +124,18 @@ docker logs --tail 100 mariadb
 docker logs -t mariadb
 ```
 
+## Troubleshooting
+
+### Check the connection between wordpress and mariadb:
+```bash
+docker exec -it srcs-wordpress-1 sh
+
+nc -w 3 mariadb 3306
+echo $?
+```
+Returns `0` if the connection is successful. If not, check the logs of the mariadb container.
+
+
 ## Docker Compose commands
 ```bash
 # Build and start all containers in foreground (shows logs)

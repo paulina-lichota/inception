@@ -4,3 +4,17 @@ mkdir -p /home/plichota/data/wordpress
 
 Poi aggiungi il dominio a /etc/hosts:
 echo "127.0.0.1 plichota.42.fr" | sudo tee -a /etc/hosts
+
+
+Soluzione mariadb:
+
+> docker logs srcs-mariadb-1
+> docker ps 
+
+> make mariadb (invece di "docker exec -it srcs-wordpress-1 sh")
+> ping mariadb
+
+> mysql -h mariadb -u wpuser -p$(cat /run/secrets/db_password)
+cat: /run/secrets/db_password: No such file or directory
+Enter password: 
+ERROR 2005 (HY000): Unknown MySQL server host 'mariadb' (-3)
