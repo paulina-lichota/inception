@@ -6,7 +6,7 @@ Poi aggiungi il dominio a /etc/hosts:
 echo "127.0.0.1 plichota.42.fr" | sudo tee -a /etc/hosts
 
 
-Soluzione mariadb:
+Soluzione mariadb non si connette:
 
 > docker logs srcs-mariadb-1
 > docker ps 
@@ -18,3 +18,13 @@ Soluzione mariadb:
 cat: /run/secrets/db_password: No such file or directory
 Enter password: 
 ERROR 2005 (HY000): Unknown MySQL server host 'mariadb' (-3)
+
+[mysqld]
+bind-address=0.0.0.0/ # netstat -tlnp
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 127.0.0.11:41055        0.0.0.0:*               LISTEN      -
+
+MariaDB non sta ascoltando sulla 3306 — qualcosa non va. Il bind-address non è stato applicato.
+verifica se è in esecuzione
+> ps aux
