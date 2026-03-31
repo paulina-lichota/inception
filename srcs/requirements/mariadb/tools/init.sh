@@ -8,11 +8,12 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
     mysqld_safe --skip-networking &
     sleep 3
 
-    mysql -u root <<EOF
+  mysql -u root <<EOF
 CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
 CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '$(cat /run/secrets/db_password)';
 GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
 SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$(cat /run/secrets/db_root_password)');
+UPDATE mysql.user SET plugin='' WHERE User='root';
 FLUSH PRIVILEGES;
 EOF
 
