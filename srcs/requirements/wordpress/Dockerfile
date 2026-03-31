@@ -14,6 +14,9 @@ RUN apk add --no-cache \
     php84-phar \
     wget
 
+# Symlink tra php84 e php (Alpine non ha php package, creo link simbolico da usare come comando)
+RUN ln -s /usr/bin/php84 /usr/bin/php
+
 # Installa wp-cli (non esiste apk, scarichiamo dal sito che consiglia https://wp-cli.org)
 RUN wget -O /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
     && chmod +x /usr/local/bin/wp
