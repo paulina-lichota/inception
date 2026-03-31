@@ -27,11 +27,14 @@ nginx:
 # -f o --follow per seguire i log in tempo reale
 logs:
 	$(DOCKER_COMPOSE_CMD) logs -f
+
 # Rimuove i container, le immagini buildate ma NON i volumi (i dati persistono)
+# -rmi all Rimuove tutte le images buildate
+# --remove-orphans Rimuove container orfani, quelli non definiti nel docker-compose.yml
 clean:
 	$(DOCKER_COMPOSE_CMD) down \
-	--rmi all \					# Rimuove tutte le images buildate
-	--remove-orphans 			# Rimuove container orfani, quelli non definiti nel docker-compose.yml
+	--rmi all \
+	--remove-orphans
 
 # Rimuove tutte le risorse inutilizzate, inclusi container, immagini, volumi e network non utilizzati (anche non legati al progetto)
 fclean: clean
