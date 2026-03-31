@@ -28,6 +28,9 @@ WORKDIR /var/www/html
 COPY tools/setup.sh /setup.sh
 RUN chmod +x /setup.sh
 
+# Copia config di PHP-FPM che ascolta solo su localhost di default (127.0.0.1:9000) e invece deve ascoltare tutto (0.0.0.0:9000)
+COPY conf/www.conf /etc/php84/php-fpm.d/www.conf
+
 # Aumenta memoria RAM disponibile (default 128M, WordPress consiglia almeno 256M)
 # il file .ini si trova nella cartella che si crea con l'installazione di apk add php84
 # RUN ln -s /usr/bin/php84 /usr/bin/php

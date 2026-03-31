@@ -285,4 +285,33 @@ Alpine installa installa MariaDB con un file config con skip-networking di defau
 Da dentro il container di MariaDB:
 `cat /etc/my.cnf.d/mariadb-server.cnf`
 
-Devo sovrascrivere quei file.
+Devo sovrascrivere quel file. (anche nel Dockerfile)
+`COPY conf/mariadb-server.cnf /etc/my.cnf.d/mariadb-server.cnf`
+
+[mysqld] → letto solo dal daemon standalone (il nostro caso)
+# Abilita connessioni TCP/IP
+skip-networking=OFF
+# Ascolta su tutte le interfacce
+bind-address=0.0.0.0
+
+
+## Wordpress PHP-FPM
+Come se non bastasse, WordPress non accetta connessioni TCP da altri container. Devi sovrascrivere il file di configurazione di PHP-FPM.
+Il problema è PHP-FPM ascolta solo su localhost (127.0.0.1:9000) invece che su tutte le interfacce (0.0.0.0:9000).
+
+`cat /etc/php84/php-fpm.conf`
+
+Devo sovrascrivere quel file. (anche nel Dockerfile)
+`COPY conf/www.conf /etc/php84/php-fpm.d/www.conf`
+
+[www]
+user = nobody
+group = nobody
+listen = 0.0.0.0:9000
+listen.owner = nobody
+listen.group = nobody
+pm = dynamic
+pm.max_children = 5
+pm.start_servers = 2
+pm.min_spare_servers = 1
+pm.max_spare_servers = 3
