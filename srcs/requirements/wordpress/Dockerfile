@@ -30,4 +30,4 @@ EXPOSE 9000
 
 # Esegue lo script di setup, poi avvia PHP-FPM in foreground come PID 1
 ENTRYPOINT ["/setup.sh"]
-CMD ["php-fpm83", "-F"]
+CMD ["php-fpm84", "-F"]
