@@ -277,3 +277,12 @@ Con ENTRYPOINT + CMD è elegante:
 `mysqld_safe` diventa PID 1 e gira per sempre
 
 Senza questo pattern dovresti mettere tutto dentro un unico script (init + avvio del daemon). Funziona uguale ma è meno separato e meno flessibile.
+
+
+## Alpine e MariaDB
+Alpine installa installa MariaDB con un file config con skip-networking di default, quindi non accetta connessioni TCP da altri container. Devi sovrascrivere quel file.
+
+Da dentro il container di MariaDB:
+`cat /etc/my.cnf.d/mariadb-server.cnf`
+
+Devo sovrascrivere quei file.

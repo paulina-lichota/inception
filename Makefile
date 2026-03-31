@@ -52,4 +52,4 @@ help:
 	@echo "  clean   - Stop and remove containers, images, and volumes"
 	@echo "  fclean  - Remove all unused Docker data"
 
-.PHONY: all up stop down restart mariadb wordpress nginx logs clean fclean help 
+.PHONY: all up stop down restart mariadb wordpress nginx logs clean fclean help

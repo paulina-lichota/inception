@@ -1,5 +1,0 @@
-[mysqld]
-# Bind MariaDB to all interfaces (default is localhost only)
-bind-address=0.0.0.0
-# --skip-networking dice a MariaDB di non usare TCP/IP per niente 
-skip-networking=0  

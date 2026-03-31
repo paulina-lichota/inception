@@ -1,0 +1,17 @@
+# mantenuto la struttura originale del file di Alpine 
+
+[server]
+
+[mysqld] → letto solo dal daemon standalone (il nostro caso)
+# Abilita connessioni TCP/IP
+skip-networking=OFF
+# Ascolta su tutte le interfacce
+bind-address=0.0.0.0
+
+[galera]
+
+[embedded]
+
+[mariadb]
+
+[mariadb-10.5]
