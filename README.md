@@ -262,3 +262,18 @@ I motivi per usare ENTRYPOINT sono diversi:
 - **Ambienti puliti** — vuoi eseguire qualcosa senza sporcare il tuo sistema con dipendenze
 - **CI/CD** — nei pipeline di build e test ogni tool gira nel suo container, la macchina di build non ha niente installato
 - **Distribuzione** — invece di dire agli utenti "installa python 3.9, poi installa queste 20 dipendenze", gli dai un container che funziona già
+
+
+Noi lo usiamo con MariaDB per il patter **init+daemon**.
+1. Uno script di inizializzazione che prepara l'ambiente
+2. Un daemon che gira in foreground come PID 1
+
+### Pattern init + daemon
+È un pattern comune per i container che hanno bisogno di configurarsi prima di avviare il processo principale. Lo trovi spesso con database — MariaDB, PostgreSQL, MySQL — perché devono inizializzare il filesystem del database, creare utenti, impostare password prima di poter accettare connessioni.
+
+Con ENTRYPOINT + CMD è elegante:
+`init.sh` fa il lavoro sporco
+`exec "$@"` passa il controllo a mysqld_safe
+`mysqld_safe` diventa PID 1 e gira per sempre
+
+Senza questo pattern dovresti mettere tutto dentro un unico script (init + avvio del daemon). Funziona uguale ma è meno separato e meno flessibile.

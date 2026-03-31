@@ -1,43 +1,43 @@
 
+DOCKER_COMPOSE = srcs/docker-compose.yml
+
 all: up
 
 up:
-	docker compose up --build
+	docker compose -f $(DOCKER_COMPOSE) up --build
 
 stop:
-	docker compose stop
+	docker compose -f $(DOCKER_COMPOSE) stop
 
 down:
-	docker compose down \
+	docker compose -f $(DOCKER_COMPOSE) down \
 	--remove-orphans
 
-restart: down all
-
-inspect:
-
+restart: down up
 
 mariadb:
-	docker compose exec -it mariadb bash 		# -it per interagire con il terminale del container, bash per accedere alla shell del container
+	docker compose -f $(DOCKER_COMPOSE) exec mariadb sh
 
 wordpress:
-	docker compose exec -it wordpress bash
+	docker compose -f $(DOCKER_COMPOSE) exec wordpress sh
 
 nginx:
-	docker compose exec -it nginx bash
+	docker compose -f $(DOCKER_COMPOSE) exec nginx sh
 
+# -f o --follow per seguire i log in tempo reale
 logs:
-	docker compose logs -f		# -f o --follow per seguire i log in tempo reale
+	docker compose -f $(DOCKER_COMPOSE) logs -f
 
-# Rimuove i container, le immagini buildate e i volumi associati
+# Rimuove i container, le immagini buildate ma NON i volumi (i dati persistono)
 clean:
-	docker compose down \
+	docker compose -f $(DOCKER_COMPOSE) down \
 	--rmi all \					# Rimuove tutte le images buildate
-	--volumes \					# Rimuove i volumi associati ai container
 	--remove-orphans 			# Rimuove container orfani, quelli non definiti nel docker-compose.yml
 
-# Rimuove tutte le risorse inutilizzate, inclusi container, immagini, volumi e network non utilizzati
-fclean:
-	docker system prune -f
+# Rimuove tutte le risorse inutilizzate, inclusi container, immagini, volumi e network non utilizzati (anche non legati al progetto)
+fclean: clean
+	docker compose -f $(DOCKER_COMPOSE) down --volumes
+	docker network prune --force
 
 help:
 	@echo "Usage: make [target]"
@@ -50,4 +50,4 @@ help:
 	@echo "  clean   - Stop and remove containers, images, and volumes"
 	@echo "  fclean  - Remove all unused Docker data"
 
-.PHONY: all stop down restart logs clean fclean help
+.PHONY: all up stop down restart mariadb wordpress nginx logs clean fclean help 
