@@ -1,42 +1,41 @@
-
-DOCKER_COMPOSE = srcs/docker-compose.yml
+DOCKER_COMPOSE_CMD = docker compose -f $(DOCKER_COMPOSE_FILE)
+DOCKER_COMPOSE_FILE = srcs/docker-compose.yml
 
 all: up
 
 up:
-	docker compose -f $(DOCKER_COMPOSE) up --build
+	$(DOCKER_COMPOSE_CMD) up --build
 
 stop:
-	docker compose -f $(DOCKER_COMPOSE) stop
+	$(DOCKER_COMPOSE_CMD) stop
 
 down:
-	docker compose -f $(DOCKER_COMPOSE) down \
+	$(DOCKER_COMPOSE_CMD) down \
 	--remove-orphans
 
 restart: down up
 
 mariadb:
-	docker compose -f $(DOCKER_COMPOSE) exec mariadb sh
+	$(DOCKER_COMPOSE_CMD) exec mariadb sh
 
 wordpress:
-	docker compose -f $(DOCKER_COMPOSE) exec wordpress sh
+	$(DOCKER_COMPOSE_CMD) exec wordpress sh
 
 nginx:
-	docker compose -f $(DOCKER_COMPOSE) exec nginx sh
+	$(DOCKER_COMPOSE_CMD) exec nginx sh
 
 # -f o --follow per seguire i log in tempo reale
 logs:
-	docker compose -f $(DOCKER_COMPOSE) logs -f
-
+	$(DOCKER_COMPOSE_CMD) logs -f
 # Rimuove i container, le immagini buildate ma NON i volumi (i dati persistono)
 clean:
-	docker compose -f $(DOCKER_COMPOSE) down \
+	$(DOCKER_COMPOSE_CMD) down \
 	--rmi all \					# Rimuove tutte le images buildate
 	--remove-orphans 			# Rimuove container orfani, quelli non definiti nel docker-compose.yml
 
 # Rimuove tutte le risorse inutilizzate, inclusi container, immagini, volumi e network non utilizzati (anche non legati al progetto)
 fclean: clean
-	docker compose -f $(DOCKER_COMPOSE) down --volumes
+	$(DOCKER_COMPOSE_CMD) down --volumes
 	docker network prune --force
 
 help:
