@@ -158,6 +158,14 @@ then:
 -- Esci
 `EXIT;`
 
+# Per MariaDB
+
+-- Mostra tutti gli utenti del database
+SELECT User, Host FROM mysql.user;
+
+-- Mostra i permessi di un utente
+SHOW GRANTS FOR 'wpuser'@'%';
+
 ## Docker Compose commands
 ```bash
 # Build and start all containers in foreground (shows logs)
