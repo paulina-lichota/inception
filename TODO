@@ -1,0 +1,6 @@
+Ora crea le cartelle per i volumi:
+mkdir -p /home/plichota/data/db
+mkdir -p /home/plichota/data/wordpress
+
+Poi aggiungi il dominio a /etc/hosts:
+echo "127.0.0.1 plichota.42.fr" | sudo tee -a /etc/hosts
