@@ -3,8 +3,16 @@ DOCKER_COMPOSE_FILE = srcs/docker-compose.yml
 
 all: up
 
-up:
+up: prepare
 	$(DOCKER_COMPOSE_CMD) up --build
+
+prepare:
+	cp srcs/.env.example srcs/.env
+	mkdir -p secrets
+	echo -n "yourdbpassword" > secrets/db_password.txt
+	echo -n "yourrootpassword" > secrets/db_root_password.txt
+	echo -n "youradminpassword" > secrets/wp_admin_password.txt
+	echo -n "youruserpassword" > secrets/wp_user_password.txt
 
 stop:
 	$(DOCKER_COMPOSE_CMD) stop

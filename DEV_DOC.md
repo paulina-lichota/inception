@@ -256,13 +256,60 @@ Folder:
 Distro download:
 https://www.debian.org/download
 
-
+### Basic settings
 RAM 4GB
 CPU 4
 Memory 50+GB
 username with your username
 
+in Network of your VM add the port forwarding
+SSH TCP 22 -> 22
+HTTP TCP 80 -> 80
+HTTPS TCP 443 -> 443
+
+Then reboot
+
+### Install git
+
+aggiungiti al gruppo sudo se hai usermod,
+`usermod -aG sudo nome_utente`
+altrimenti vai di root con
+`su -`
+
+Aggiorna la VM e installa dipendenze base
+`apt install ca-certificates curl gnupg lsb-release -y`
+`sudo apt update`
+`sudo apt upgrade -y`
+
+install git
+`sudo apt install git`
+
+### Install docker and docker-compose
+
+unistall older version of docker
+`sudo apt remove docker docker-engine docker-compose docker.io containerd runc`
+`sudo apt purge docker docker-engine docker-compose docker.io containerd runc`
+`sudo apt autoremove -y`
+check
+`which docker`
+`docker --version`
+
+Ora seguiamo la guida
+[https://docs.docker.com/engine/install/debian/]
+
+Ora vediamo lo status con
+`sudo systemctl docker status`
+o in alcuni sistemi facciamo partire il daemon manualmente:
+`sudo systemctl docker status`
+
+Testa con
+`sudo docker run hello-world`
+
+### Now let's clone the repo
 set ssh keys for github (42 account)
 `ssh-keygen -t rsa -b 4096 -C "your_email@example.com"`
 
-glone git repo with ssh
+copy the ssh key in the clipboard
+`cat ~/.ssh/id_rsa.pub`
+
+Paste into your intra account
