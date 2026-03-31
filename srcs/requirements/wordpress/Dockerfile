@@ -28,6 +28,11 @@ WORKDIR /var/www/html
 COPY tools/setup.sh /setup.sh
 RUN chmod +x /setup.sh
 
+# Aumenta memoria RAM disponibile (default 128M, WordPress consiglia almeno 256M)
+# il file .ini si trova nella cartella che si crea con l'installazione di apk add php84
+# RUN ln -s /usr/bin/php84 /usr/bin/php
+RUN echo "memory_limit=256M" > /etc/php84/conf.d/memory.ini
+
 # Porta su cui PHP-FPM ascolta
 EXPOSE 9000
 
