@@ -138,9 +138,25 @@ Returns `0` if the connection is successful. If not, check the logs of the maria
 ## DB
 inside mariadb container:
 `mariadb -u root -p$(cat /run/secrets/db_root_password)`
+
 then:
-SHOW DATABASES;
-SHOW TABLES;
+-- Mostra tutti i database
+`SHOW DATABASES;`
+
+-- Seleziona il database wordpress
+`USE wordpress;`
+
+-- Mostra tutte le tabelle
+`SHOW TABLES;`
+
+-- Mostra tutti gli utenti WordPress
+`SELECT * FROM wp_users;`
+
+-- Mostra solo username e email
+`SELECT user_login, user_email FROM wp_users;`
+
+-- Esci
+`EXIT;`
 
 ## Docker Compose commands
 ```bash
