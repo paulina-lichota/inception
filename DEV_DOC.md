@@ -245,3 +245,24 @@ inception/
             ├── conf/
             └── tools/
 ```
+
+## VM
+
+You should use a VM to run the project.
+
+Folder:
+/goinfe/login
+
+Distro download:
+https://www.debian.org/download
+
+
+RAM 4GB
+CPU 4
+Memory 50+GB
+username with your username
+
+set ssh keys for github (42 account)
+`ssh-keygen -t rsa -b 4096 -C "your_email@example.com"`
+
+glone git repo with ssh
