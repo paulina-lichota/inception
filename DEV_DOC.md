@@ -25,6 +25,7 @@ cd inception
 ```
 
 ### 2. Create the secrets files
+
 ```bash
 mkdir -p secrets
 echo -n "yourdbpassword" > secrets/db_password.txt
@@ -32,13 +33,16 @@ echo -n "yourrootpassword" > secrets/db_root_password.txt
 echo -n "youradminpassword" > secrets/wp_admin_password.txt
 echo -n "youruserpassword" > secrets/wp_user_password.txt
 ```
+or run `make` to prepare the sample files 
 
 ### 3. Create the .env file
 ```bash
 cp srcs/.env.example srcs/.env
 ```
+or run `make` to prepare the sample files 
 
 Edit `srcs/.env` with your values:
+
 ```bash
 DOMAIN_NAME=plichota.42.fr
 MYSQL_DATABASE=wordpress
@@ -55,6 +59,8 @@ mkdir -p /home/plichota/data/wordpress
 mkdir -p /home/plichota/data/db
 ```
 
+or run `make` to prepare
+
 ### 5. Add the domain to /etc/hosts
 ```bash
 echo "127.0.0.1 plichota.42.fr" | sudo tee -a /etc/hosts
@@ -62,8 +68,13 @@ echo "127.0.0.1 plichota.42.fr" | sudo tee -a /etc/hosts
 
 ## Build and launch
 ```bash
-# Build images and start all containers
+
+# Prepare secrets and env, create missing folders
 make
+# Then change the secrets and .env
+
+# Build images and start all containers
+make up
 
 # Start in background
 docker compose -f srcs/docker-compose.yml up -d --build
