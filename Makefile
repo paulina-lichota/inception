@@ -5,7 +5,7 @@ DATA_DIR = /home/$(LOGIN)/data
 
 all: prepare dirs up
 
-# Crea secret ed env solo se mancano
+# Crea secret ed env solo se mancano (randomicamente con openssl)
 prepare:
 	@mkdir -p secrets
 	@[ -f srcs/.env ] || cp srcs/.env.example srcs/.env
@@ -60,7 +60,9 @@ clean:
 	--rmi all \
 	--remove-orphans
 
-# elimina anche i dati persistenti sull'host
+# elimina anche i dati persistenti sull'host 
+# /home/<login>/data/db/* e /home/plichota/data/wordpress/*
+# importante per script init.sh di Mariadb! 
 fclean: clean
 	@sudo rm -rf $(DATA_DIR)/db/*
 	@sudo rm -rf $(DATA_DIR)/wordpress/*

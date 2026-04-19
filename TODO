@@ -5,7 +5,6 @@ mkdir -p /home/plichota/data/wordpress
 Poi aggiungi il dominio a /etc/hosts:
 echo "127.0.0.1 plichota.42.fr" | sudo tee -a /etc/hosts
 
-
 Soluzione mariadb non si connette:
 
 > docker logs srcs-mariadb-1
@@ -28,3 +27,20 @@ tcp        0      0 127.0.0.11:41055        0.0.0.0:*               LISTEN      
 MariaDB non sta ascoltando sulla 3306 — qualcosa non va. Il bind-address non è stato applicato.
 verifica se è in esecuzione
 > ps aux
+
+
+>>>>>>> DIAGNOSI MARIADB
+docker ps
+
+# container id
+docker exec -it mariadb hostname
+
+# path and release
+docker exec -it mariadb which mariadb
+docker exec -it mariadb cat /etc/alpine-release
+
+# inizializzato?
+docker logs mariadb 2>&1 | grep -i "inizializzazione\|init"
+
+# contenuto directory host
+sudo ls -la /home/plichota/data/db/

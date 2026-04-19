@@ -91,8 +91,8 @@ docker exec -it mariadb mysql -u root
 Enter as root without password AND ASK FOR PASSWORD
 ```bash
 docker exec -it mariadb mysql -u root -p
-```
 
+```
 
 Enter as root with password
 ```bash
