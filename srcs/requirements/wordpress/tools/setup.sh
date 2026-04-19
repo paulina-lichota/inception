@@ -6,6 +6,10 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
     # Scarica WordPress o notifica se fallisce
     wp core download --path=/var/www/html --allow-root || { echo "WordPress download failed"; exit 1; }
 
+    # Impostare i permessi corretti per WordPress
+    chown -R www-data:www-data /var/www/html
+    chmod -R 755 /var/www/html/wp-content
+    chmod 644 /var/www/html/wp-config.php
 
     # Crea wp-config.php con le credenziali del database
     wp config create \
