@@ -3,8 +3,9 @@
 # Scarica WordPress solo se non è già installato
 if [ ! -f "/var/www/html/wp-config.php" ]; then
 
-    # Scarica WordPress
-    wp core download --path=/var/www/html --allow-root
+    # Scarica WordPress o notifica se fallisce
+    wp core download --path=/var/www/html --allow-root || { echo "WordPress download failed"; exit 1; }
+
 
     # Crea wp-config.php con le credenziali del database
     wp config create \

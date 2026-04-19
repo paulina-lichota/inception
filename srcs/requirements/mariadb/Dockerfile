@@ -11,5 +11,12 @@ RUN chmod +x /init.sh
 
 EXPOSE 3306
 
+# Script di inizializzazione
+# Usiamo entrypoint per essere sicuri che questo script venga 
+# eseguito all'avvio del container PRIMA di lanciare il processo principale
 ENTRYPOINT ["/init.sh"]
+
+# Comando di default
+# Sovrascrivibile con docker run
+# Avvia il servizio vero
 CMD ["mysqld_safe"]
