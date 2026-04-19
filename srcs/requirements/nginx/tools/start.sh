@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Se non avessi fatto la pignola col DOMAIN_NAME, avrei potuto mettere tutto di là eh (nel Dockerfile)
+# Se avessi hardcodato il DOMAIN_NAME, avrei potuto mettere tutto nel dockerfile
 
 # Genera il certificato SSL self-signed
 openssl req -x509 -newkey rsa:4096 \
