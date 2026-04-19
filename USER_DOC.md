@@ -10,8 +10,11 @@ This project runs a WordPress website using three services:
 
 ## Start and stop the project
 ```bash
-# Start everything
+# Prepare everything
 make
+
+# Start everything
+make up
 
 # Stop everything (data is preserved)
 make down

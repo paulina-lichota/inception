@@ -1,11 +1,11 @@
 DOCKER_COMPOSE_FILE = srcs/docker-compose.yml
 DOCKER_COMPOSE_CMD = docker compose -f $(DOCKER_COMPOSE_FILE)
 
-all: up
+all: prepare
 	mkdir -p /home/plichota/data/db
 	mkdir -p /home/plichota/data/wordpress
 
-up: prepare
+up:
 	$(DOCKER_COMPOSE_CMD) up --build
 
 prepare:
