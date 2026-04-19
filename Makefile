@@ -64,8 +64,8 @@ clean:
 # /home/<login>/data/db/* e /home/plichota/data/wordpress/*
 # importante per script init.sh di Mariadb! 
 fclean: clean
-	@sudo rm -rf $(DATA_DIR)/db/*
-	@sudo rm -rf $(DATA_DIR)/wordpress/*
+	@docker run --rm -v $(DATA_DIR)/db:/data alpine sh -c 'rm -rf /data/* /data/.[!.]*' 2>/dev/null || true
+	@docker run --rm -v $(DATA_DIR)/wordpress:/data alpine sh -c 'rm -rf /data/* /data/.[!.]*' 2>/dev/null || true
 	@docker system prune -af
 	@echo "Pulizia completa"
 
