@@ -2,19 +2,22 @@ DOCKER_COMPOSE_FILE = srcs/docker-compose.yml
 DOCKER_COMPOSE_CMD = docker compose -f $(DOCKER_COMPOSE_FILE)
 
 all: prepare
-	mkdir -p /home/plichota/data/db
-	mkdir -p /home/plichota/data/wordpress
+	@mkdir -p /home/plichota/data/db
+	@mkdir -p /home/plichota/data/wordpress
 
 up:
 	$(DOCKER_COMPOSE_CMD) up --build
 
 prepare:
-	cp srcs/.env.example srcs/.env
-	mkdir -p secrets
-	echo -n "yourdbpassword" > secrets/db_password.txt
-	echo -n "yourrootpassword" > secrets/db_root_password.txt
-	echo -n "youradminpassword" > secrets/wp_admin_password.txt
-	echo -n "youruserpassword" > secrets/wp_user_password.txt
+	@cp srcs/.env.example srcs/.env
+	@mkdir -p secrets
+	@echo -n "yourdbpassword" > secrets/db_password.txt
+	@echo -n "yourrootpassword" > secrets/db_root_password.txt
+	@echo -n "youradminpassword" > secrets/wp_admin_password.txt
+	@echo -n "youruserpassword" > secrets/wp_user_password.txt
+	@echo "Files /secrets creati"
+	@echo "Copia di .env creata"
+	@echo "Modifica i secrets, modifica il .env e runna 'make up'"
 
 stop:
 	$(DOCKER_COMPOSE_CMD) stop
