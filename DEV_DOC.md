@@ -262,7 +262,7 @@ inception/
 You should use a VM to run the project.
 
 Folder:
-/goinfe/login
+/sgoinfe/login
 
 Distro download:
 https://www.debian.org/download
