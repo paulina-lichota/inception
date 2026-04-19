@@ -1,33 +1,37 @@
 #!/bin/sh
 
-set -e
-
-DATADIR="/var/lib/mysql"
-
 # Inizializza il database solo se non esiste già
-if [ ! -d "$DATADIR/mysql" ]; then
-    echo "Inizializzazione di MariaDB..."
+if [ ! -d "/var/lib/mysql/mysql" ]; then
+		echo "Inizializzazione di MariaDB..."
 
-    # Inizializza i file di sistema
-    mysql_install_db --user=mysql --datadir="$DATADIR" > /dev/null
+		# Inizializza i file di sistema
+		mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
-    # Legge i secret
-    DB_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
-    DB_PASSWORD=$(cat /run/secrets/db_password)
+		if [ -f /run/secrets/db_root_password ]; then
+			echo "Root password file trovato"
+		else
+			echo "Root password file NON trovato"
+			exit 1
+		fi
 
-    mysql -u root <<EOF
-      CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
-      CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '$(cat /run/secrets/db_password)';
-      GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
-      SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$(cat /run/secrets/db_root_password)');
-      DELETE FROM mysql.user WHERE User='';
-      DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
-      FLUSH PRIVILEGES;
-      EOF
+		# mysqld legge SQL da stdin
+		# --bootstrap esegue in modo sincrono dal heredoc ed esce
+		# NON è un daemon in background 
+		# ATTENZIONE -EOF RICHIEDE TAB NO SPAZI! Controllare editor
+		mysqld --user=mysql --bootstrap <<-EOF
+				USE mysql;
+				FLUSH PRIVILEGES;
 
-    mysqladmin -u root shutdown
-    sleep 5
+				CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
+				CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '$(cat /run/secrets/db_password)';
+				GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
 
+				ALTER USER 'root'@'localhost' IDENTIFIED BY '$(cat /run/secrets/db_root_password)';
+
+				DELETE FROM mysql.global_priv WHERE User='';
+				DELETE FROM mysql.global_priv WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
+				FLUSH PRIVILEGES;
+		EOF
 fi
 
 # Chiama CMD
