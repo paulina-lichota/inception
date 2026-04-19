@@ -56,7 +56,7 @@ WP_USER_EMAIL=editor@plichota.42.fr
 ### 4. Create the data directories
 ```bash
 mkdir -p /home/plichota/data/wordpress
-mkdir -p /home/plichota/data/db
+mkdir -p 
 ```
 
 or run `make` to prepare
@@ -262,7 +262,7 @@ inception/
 You should use a VM to run the project.
 
 Folder:
-/sgoinfe/login
+/sgoinfre/login
 
 Distro download:
 https://www.debian.org/download

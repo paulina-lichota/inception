@@ -1,5 +1,7 @@
 services:
   mariadb:
+    container_name: mariadb # nome fisso, no prefix auto
+    image: mariadb  # forzo immagine con lo stesso nome
     build: ./requirements/mariadb
     restart: always
     env_file: ./.env
@@ -10,6 +12,8 @@ services:
       - db_data:/var/lib/mysql
     networks:
       - inception
+    expose:
+      - "3306"  # espone solo su rete interna
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       interval: 10s
@@ -17,6 +21,8 @@ services:
       retries: 5
 
   wordpress:
+    container_name: wordpress # nome fisso
+    image: wordpress  # forzo immagine con lo stesso nome
     build: ./requirements/wordpress
     restart: always
     env_file: ./.env
@@ -33,6 +39,8 @@ services:
       - inception
 
   nginx:
+    container_name: nginx # nome fisso
+    image: nginx  # forzo immagine con lo stesso nome
     build: ./requirements/nginx
     restart: always
     env_file: ./.env

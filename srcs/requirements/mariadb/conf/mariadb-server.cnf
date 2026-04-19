@@ -2,16 +2,17 @@
 
 [server]
 
-[mysqld] → letto solo dal daemon standalone (il nostro caso)
+[mysqld]
+# mysqld è il daemon standalone
+
 # Abilita connessioni TCP/IP
-skip-networking=OFF
+skip-networking=0
+
 # Ascolta su tutte le interfacce
+# Wordpress puo' connettersi dalla rete Docker
 bind-address=0.0.0.0
 
-[galera]
-
-[embedded]
-
-[mariadb]
-
-[mariadb-10.5]
+# Socket e datadir standard Alpine
+datadir=/var/lib/mysql
+socket=/run/mysqld/mysqld.sock
+port=3306

@@ -32,7 +32,7 @@ mariadb:
 	$(DOCKER_COMPOSE_CMD) exec mariadb sh
 
 db:
-	docker exec -it srcs-mariadb-1 mariadb -u root -p$$(cat /run/secrets/db_root_password)
+	docker exec -it mariadb mariadb -u root -p$$(cat /run/secrets/db_root_password)
 
 wordpress:
 	$(DOCKER_COMPOSE_CMD) exec wordpress sh

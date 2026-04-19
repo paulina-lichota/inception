@@ -79,3 +79,27 @@ docker exec -it nginx sh
 ```
 
 All three containers should show `Up` in `docker ps`. If one shows `Restarting`, check its logs to find the error.
+
+
+## Enter MariaDB as root
+
+Enter as root without password
+```bash
+docker exec -it mariadb mysql -u root
+```
+
+Enter as root without password AND ASK FOR PASSWORD
+```bash
+docker exec -it mariadb mysql -u root -p
+```
+
+
+Enter as root with password
+```bash
+# Run this command
+	docker exec -it mariadb mariadb -u root -p$$(cat /run/secrets/db_root_password)
+
+# or this one (since it's specified in the makefile)
+make db
+
+```
