@@ -33,10 +33,6 @@ down:
 
 restart: down up
 
-# Logs di tutti i container
-logs:
-	$(COMPOSE) logs -f
-
 # Shell dentro i container
 sh-mariadb:
 	$(COMPOSE) exec mariadb sh
