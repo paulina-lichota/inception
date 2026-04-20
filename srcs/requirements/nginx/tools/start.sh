@@ -13,4 +13,4 @@ openssl req -x509 -newkey rsa:4096 \
 envsubst '${DOMAIN_NAME}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
 
 # Avvia nginx in foreground come PID 1
-nginx -g 'daemon off;'
+exec nginx -g 'daemon off;'
