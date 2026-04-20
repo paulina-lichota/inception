@@ -20,8 +20,43 @@ dirs:
 	@mkdir -p $(DATA_DIR)/wordpress
 
 # build e avvio in background
-up: dirs
-	$(COMPOSE) up -d --build
+up: prepare dirs
+	@$(COMPOSE) up -d --build
+	@echo ""
+	@echo "Avvio in corso, attendo i container..."
+	@$(MAKE) -s wait-healthy
+	@$(MAKE) -s status
+
+# Attende che tutti i container siano up (con timeout di 120s)
+wait-healthy:
+	@TIMEOUT=120; \
+	ELAPSED=0; \
+	while [ $$ELAPSED -lt $$TIMEOUT ]; do \
+		RUNNING=$$($(COMPOSE) ps --services --filter "status=running" | wc -l); \
+		TOTAL=$$($(COMPOSE) ps --services | wc -l); \
+		if [ "$$RUNNING" = "$$TOTAL" ] && [ "$$TOTAL" -gt 0 ]; then \
+			exit 0; \
+		fi; \
+		sleep 2; \
+		ELAPSED=$$((ELAPSED + 2)); \
+		printf "."; \
+	done; \
+	echo " timeout!"; \
+	exit 1
+
+# Mostra informazioni sul sistema avviato
+status:
+	@DOMAIN=$$(grep -E '^DOMAIN_NAME=' srcs/.env | cut -d'=' -f2); \
+	echo ""; \
+	echo "╔════════════════════════════════════════════════╗"; \
+	echo "║         Inception è pronto!                    ║"; \
+	echo "╠════════════════════════════════════════════════╣"; \
+	printf  "║  🌐 Sito:     https://%-24s ║\n" "$$DOMAIN"; \
+	printf  "║  🔧 Admin:    https://%-24s ║\n" "$$DOMAIN/wp-admin"; \
+	echo "║                                                ║"; \
+	echo "║  Container attivi:                             ║"; \
+	$(COMPOSE) ps --services | sed 's/^/║    • /;s/$$/                                  /' | cut -c1-50 | sed 's/$$/║/'; \
+	echo "╚════════════════════════════════════════════════╝"
 
 stop:
 	$(COMPOSE) stop
@@ -86,4 +121,5 @@ help:
 	@echo "  fclean       - clean + elimina dati persistenti su host"
 
 .PHONY: all prepare dirs up stop down restart re logs db \
-        sh-mariadb sh-wordpress sh-nginx clean fclean help
+        sh-mariadb sh-wordpress sh-nginx clean fclean help \
+		wait-healthy status
